@@ -77,8 +77,8 @@ RUN set -x; \
     && service slapd start \
     && cd /opt/grouper.apiBinary-2.2.1 \
     && bin/gsh -registry -check -runscript -noprompt \
-    && bin/gsh.sh -xmlimportold GrouperSystem /quickstart.xml -noprompt \
-    && echo "GrouperSession.startRootSession(); addMember(\"etc:wheel\",\"banderson\");" | bin/gsh \
+    # && bin/gsh.sh -xmlimportold GrouperSystem /quickstart.xml -noprompt \
+    && echo "GrouperSession.startRootSession(); addMember(\"etc:sysadmingroup\",\"banderson\");" | bin/gsh \
     && mkdir /tmp/grp-api/ \
     && expect /opt/patch-scripts/api-patch \
     && rm -fr /tmp/grp-api/ \
