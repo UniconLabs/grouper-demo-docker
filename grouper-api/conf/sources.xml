@@ -494,10 +494,10 @@ where
    </source>
    -->
    
-   <!--
+  
   <source adapterClass="edu.internet2.middleware.grouper.subj.GrouperJndiSourceAdapter">
-    <id>example</id>
-    <name>Example Edu</name>
+    <id>ldap</id>
+    <name>Ldap Edu</name>
     <type>person</type>
     <init-param>
       <param-name>INITIAL_CONTEXT_FACTORY</param-name>
@@ -513,15 +513,15 @@ where
     </init-param>
     <init-param>
       <param-name>SECURITY_PRINCIPAL</param-name>
-      <param-value>cn=Manager,dc=example,dc=edu</param-value>
+      <param-value>cn=admin,dc=example,dc=edu</param-value>
     </init-param>
     <init-param>
       <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>secret</param-value>
+      <param-value>password</param-value>
     </init-param>
      <init-param>
       <param-name>SubjectID_AttributeType</param-name>
-      <param-value>exampleEduRegID</param-value>
+      <param-value>uid</param-value>
     </init-param>
      <init-param>
       <param-name>SubjectID_formatToLowerCase</param-name>
@@ -544,7 +544,7 @@ where
         <param>
             <param-name>filter</param-name>
             <param-value>
-                (&amp; (exampleEduRegId=%TERM%) (objectclass=exampleEduPerson))
+                (&amp; (uid=%TERM%) (objectclass=person))
             </param-value>
         </param>
         <param>
@@ -556,7 +556,7 @@ where
         <param>
             <param-name>base</param-name>
             <param-value>
-                ou=people,dc=example,dc=edu
+                ou=People,dc=example,dc=edu
             </param-value>
         </param>
          
@@ -566,7 +566,7 @@ where
         <param>
             <param-name>filter</param-name>
             <param-value>
-                (&amp; (uid=%TERM%) (objectclass=exampleEduPerson))
+                (&amp; (uid=%TERM%) (objectclass=person))
             </param-value>
         </param>
         <param>
@@ -588,7 +588,7 @@ where
          <param>
             <param-name>filter</param-name>
             <param-value>
-                (&amp; (|(|(uid=%TERM%)(cn=*%TERM%*))(exampleEduRegId=%TERM%))(objectclass=exampleEduPerson))
+                (&amp; (|(|(uid=%TERM%)(cn=*%TERM%*))(uid=%TERM%))(objectclass=person))
             </param-value>
         </param>
         <param>
@@ -600,7 +600,7 @@ where
          <param>
             <param-name>base</param-name>
             <param-value>
-                ou=people,dc=example,dc=edu
+                ou=People,dc=example,dc=edu
             </param-value>
         </param>
     </search>
@@ -617,7 +617,7 @@ where
       <param-value>searchAttribute0</param-value>
     </init-param>
 
-     <!- - ##########################  STATUS SECTION for searches to filter out inactives and allow
+     <!-- ##########################  STATUS SECTION for searches to filter out inactives and allow
                                                      the user to filter by status with e.g. status=all
                                                      this is optional, and advanced - -> 
      <!- - column or attribute which represents the status - - >
@@ -666,20 +666,18 @@ where
        <param-name>statusTranslateDatastore0</param-name>
        <param-value>A</param-value>
      </init-param> - - >
-     <!- - ########################## END STATUS SECTION - - > 
+     <!- - ########################## END STATUS SECTION --> 
 
 
     <internal-attribute>searchAttribute0</internal-attribute>
 
     ///Attributes you would like to display when doing a search 
-    <attribute>cn</attribute>
+    <attribute>givenName</attribute>
     <attribute>sn</attribute>
     <attribute>uid</attribute>
-    <attribute>department</attribute>
-    <attribute>exampleEduRegId</attribute>
-   
+    
   </source>
--->
+
 
 </sources>
 

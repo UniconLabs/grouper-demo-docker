@@ -39,3 +39,19 @@ uid: banderson
 sn: Anderson
 cn: Bob Anderson
 userPassword: password
+
+dn: ou=Groups,dc=example,dc=edu
+objectClass: organizationalUnit
+objectClass: top
+ou: Groups
+
+dn: cn=users,ou=Groups,dc=example,dc=edu
+objectClass: groupOfUniqueNames
+objectClass: top
+uniqueMember: uid=banderson,ou=People,dc=example,dc=edu
+uniqueMember: uid=jsmith,ou=People,dc=example,dc=edu
+cn: users
+
+
+
+

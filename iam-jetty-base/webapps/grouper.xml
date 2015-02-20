@@ -1,0 +1,28 @@
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+  <Set name="war">/opt/grouper.ui-2.2.1/dist/grouper.war</Set>
+  <Set name="contextPath">/grouper</Set>
+  <Set name="extractWAR">false</Set>
+  <Set name="copyWebDir">false</Set>
+  <Set name="copyWebInf">true</Set>
+  <Set name="securityHandler">
+    <New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
+	    <Set name="loginService">
+	        <New class="org.eclipse.jetty.jaas.JAASLoginService">
+		        <Set name="name">Grouper Application</Set>
+		        <Set name="loginModuleName">ldaploginmodule</Set>
+		        <!--<Set name="RoleCheckPolicy">
+		    		<New class="org.eclipse.jetty.jaas.StrictRoleCheckPolicy"/>
+				</Set>
+		  		<Set name="CallbackHandlerClass">
+		       		org.eclipse.jetty.jaas.callback.DefaultCallbackHandler
+		  		</Set>
+		  		<Set name="roleClassNames">
+		    		<Array type="java.lang.String">
+		      			<Item>org.eclipse.jetty.jaas.JAASRole</Item>
+		    		</Array>
+		  		</Set>-->
+       		</New>
+     	</Set>
+    </New>
+  </Set>
+</Configure>
