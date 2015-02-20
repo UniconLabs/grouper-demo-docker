@@ -1,0 +1,38 @@
+set timeout 2
+
+spawn /opt/jdk1.7.0_75/bin/java -jar /grouperInstaller.jar
+
+expect "\[install\]:"
+send "patch\r"
+
+expect "\[/\]:"
+send "/tmp/grp-api\r"
+
+expect "What do you want to patch?  api, ui, ws, or psp?"
+send "api\r"
+
+expect "Where is the grouper API installed?"
+send "/opt/grouper.apiBinary-2.2.1\r"
+
+expect "What do you want to do with patches (install, revert, status)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_0 (t|f)?"
+send "\r"
+
+expect "<enter> to continue."
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_1 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_2 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_3 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_4 (t|f)?"
+send "\r"
+
+expect eof
