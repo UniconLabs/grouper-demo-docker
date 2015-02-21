@@ -325,7 +325,7 @@
   <resolver:AttributeDefinition
     id="stemDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="stemNameInStem"
     rdnAttributeName="ou"
     stemRdnAttributeName="ou"
@@ -373,7 +373,7 @@
   <resolver:AttributeDefinition
     id="stemDnAlternateChangeLog"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="propertyOldValue"
     rdnAttributeName="ou"
     stemRdnAttributeName="ou"
