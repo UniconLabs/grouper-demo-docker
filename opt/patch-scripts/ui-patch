@@ -12,7 +12,7 @@ expect "What do you want to patch?  api, ui, ws, or psp?"
 send "ui\r"
 
 expect "Where is the grouper UI installed?"
-send "/opt/apache-tomcat-7.0.55/webapps/grouper/\r"
+send "/opt/apache-tomcat-6.0.43/webapps/grouper/\r"
 
 expect "What do you want to do with patches (install, revert, status)?"
 send "\r"

@@ -6,22 +6,28 @@
 				- Incorporate the courses (after adding more); 
 				- randomly add a second non-duplticating affliate
 		*/
-			var surnames = ["Gasper", "Smith", "Anderson", "Roberts", "Davis", "Brown", "Langenberg", "Vales", "Grady", "Doe"];
+			var surnames = ["Gasper", "Smith", "Anderson", "Roberts", "Davis", "Brown", "Langenberg", "Vales",
+				"Grady", "Doe", "Morrison", "Walters", "Johnson", "Williams", "Peterson", "Martinez", "Thompson",
+				"White", "Lee", "Clark", "Lewis", "Lopez", "Gonazles", "Scott", "Henderson", "Butler", "Price"];
 
-			var givenNames = ["John", "Michael", "Jennifer", "Nancy", "Bill", "William", "Kiersten", "Marie", "Lori", "Mark", "Eric", 
-							  "David", "Ann", "Donna", "Paul", "Thomas", "Robert", "David", "Jim", "James", "Blake", "Sarah", "Karoline",
-							  "Kim", "Erik", "Greg", "Karl", "Colin", "Jo"];
+			var givenNames = ["John", "Michael", "Jennifer", "Nancy", "Bill", "William", 
+							"Kiersten", "Marie", "Lori", "Mark", "Eric", "David", "Ann", 
+							"Donna", "Paul", "Thomas", "Robert", "David", "Jim", "James",
+							"Blake", "Sarah", "Karoline", "Kim", "Erik", "Greg", "Karl", 
+							"Colin", "Jo", "Betty", "Lisa", "Heather", "Mary", "Jennifer"];
 
-			var departments = ["Computer Science", "Engineering", "Business", "Accounting", "Law", "Physical Education", "Language Arts",
-							   "Financial Aid", "Information Technology", "Advising", "Purchasing", "Account Payable"];
+			var departments = ["Computer Science", "Engineering", "Business", "Accounting",
+							   "Law", "Physical Education", "Language Arts", "Financial Aid",
+							   "Information Technology", "Advising", "Purchasing", "Account Payable"];
 
 			var affliations = ["student", "staff", "faculty", "member", "alum", "community"];
 
-			var courses = ["ACCT101", "ACCT201", "MATH100", "MATH101", "CS251", "CS252", "SCI123", "SCI123", "SCI404"];
+			var courses = ["ACCT101", "ACCT201", "MATH100", "MATH101", "CS251", "CS252", "SCI123", 
+							"SCI123", "SCI404"];
 
 			function generateData() {
 				var people = [];
-				var uids = []
+				var uids = [];
 
 				var personCount = parseInt(document.getElementById('count').value)-1;
 				var tableName = document.getElementById('table_name').value;
@@ -35,7 +41,7 @@
 					course = selectUnduplicated(courses, 4);
 
 					uid = givenName[0] + surname;
-					if (uids.indexOf(uid) > 0) {
+					if (uids.indexOf(uid) >= 0) {
 						uid = uid + i;
 					}	
 					uids.push(uid);
@@ -83,7 +89,7 @@
 				output = output.replace(/<department>/g, person.department);
 
 				for (i=0; i < person.affliations.length; i++) {
-					output += "eduPersonAffliation: " + person.affliations[i] + "\n";
+					output += "eduPersonAffiliation: " + person.affliations[i] + "\n";
 				}
 
 				return output + "\n";
