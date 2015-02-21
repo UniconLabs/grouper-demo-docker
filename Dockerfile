@@ -60,10 +60,12 @@ RUN \
 
 ADD ldap-data/ /
 
-RUN service slapd start \
+RUN sed -i 's/inetorgperson.schema/inetorgperson.schema\ninclude \/etc\/ldap\/schema\/eduPerson.schema/g' /usr/share/slapd/slapd.conf \
+    && service slapd start \
     && mkdir -p /var/ldap/example \
     && chown -R openldap /var/ldap \
     && ldapadd -Y EXTERNAL -H ldapi:/// -f init.ldif \
+    && ldapadd -Y EXTERNAL -H ldapi:/// -f eduPerson.schema \
     && ldapadd -H ldapi:/// -f users.ldif -x -D "cn=admin,dc=example,dc=edu" -w password \
     && rm /*.ldif
 
@@ -91,9 +93,6 @@ RUN set -x; \
     && mkdir /tmp/grp-ui/ \
     && expect /opt/patch-scripts/ui-patch \
     && rm -fr /tmp/grp-ui
-
-# Clean up the install
-RUN apt-get -y remove wget tar unzip dos2unix; apt-get clean all
 
 EXPOSE 389 3306 8080
 
