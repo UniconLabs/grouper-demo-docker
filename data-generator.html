@@ -1,0 +1,163 @@
+<html>
+	<head>
+		<script>
+		/*
+			TODO: 
+				- Incorporate the courses (after adding more); 
+				- randomly add a second non-duplticating affliate
+		*/
+			var surnames = ["Gasper", "Smith", "Anderson", "Roberts", "Davis", "Brown", "Langenberg", "Vales", "Grady", "Doe"];
+
+			var givenNames = ["John", "Michael", "Jennifer", "Nancy", "Bill", "William", "Kiersten", "Marie", "Lori", "Mark", "Eric", 
+							  "David", "Ann", "Donna", "Paul", "Thomas", "Robert", "David", "Jim", "James", "Blake", "Sarah", "Karoline",
+							  "Kim", "Erik", "Greg", "Karl", "Colin", "Jo"];
+
+			var departments = ["Computer Science", "Engineering", "Business", "Accounting", "Law", "Physical Education", "Language Arts",
+							   "Financial Aid", "Information Technology", "Advising", "Purchasing", "Account Payable"];
+
+			var affliations = ["student", "staff", "faculty", "member", "alum", "community"];
+
+			var courses = ["ACCT101", "ACCT201", "MATH100", "MATH101", "CS251", "CS252", "SCI123", "SCI123", "SCI404"];
+
+			function generateData() {
+				var people = [];
+				var uids = []
+
+				var personCount = parseInt(document.getElementById('count').value)-1;
+				var tableName = document.getElementById('table_name').value;
+				var peopleOu = document.getElementById('people_ou').value;
+
+				for (i=0; i <= personCount; i++) {
+					surname = surnames[Math.floor(Math.random() * surnames.length)];
+					givenName = givenNames[Math.floor(Math.random() * givenNames.length)];
+					department = departments[Math.floor(Math.random() * departments.length)];
+					affliation = selectUnduplicated(affliations, 2);
+					course = selectUnduplicated(courses, 4);
+
+					uid = givenName[0] + surname;
+					if (uids.indexOf(uid) > 0) {
+						uid = uid + i;
+					}	
+					uids.push(uid);
+
+					var person = {uid: uid.toLowerCase(), surname: surname, givenName: givenName, department: department, affliations: affliation, courses: course};
+
+					people.push(person);
+				}
+
+				var ldif = "";
+				for (j = 0; j < people.length; j++) {
+					ldif += formatLdif(people[j], peopleOu);
+				}
+				document.getElementById('ldif').value = ldif;
+
+				var sql = "";
+				sql += sqlHeader(tableName);
+				for (k = 0; k < people.length; k++) {
+					sql += formatSqlSubjects(people[k], tableName);
+					sql += formatSqlCourses(people[k], tableName);
+				}
+				document.getElementById('sql').value = sql;
+			}
+
+			function formatLdif(person, ou) {
+				var output = 
+					"dn: uid=<uid>," + ou +"\n" +
+					"objectClass: organizationalPerson\n" +
+					"objectClass: person\n" +
+					"objectClass: top\n" +
+					"objectClass: inetOrgPerson\n" +
+					"objectClass: eduPerson\n" + 
+					"surname: <surname>\n" +
+					"givenName: <givenName>\n" +
+					"cn: <givenName> <surname>\n" +
+					"uid: <uid>\n" +
+					"mail: <uid>@example.edu\n" +
+					
+					"businessCategory:<department>\n" + 
+					"userPassword: password\n";
+
+				output = output.replace(/<uid>/g, person.uid);
+				output = output.replace(/<surname>/g, person.surname);
+				output = output.replace(/<givenName>/g, person.givenName);
+				output = output.replace(/<department>/g, person.department);
+
+				for (i=0; i < person.affliations.length; i++) {
+					output += "eduPersonAffliation: " + person.affliations[i] + "\n";
+				}
+
+				return output + "\n";
+			}
+
+			function sqlHeader(tableName) {
+				return "DROP TABLE " + tableName + ";\n" +
+				"\n" +
+				"CREATE TABLE " + tableName + " (\n" +
+				"  uid varchar(255) NOT NULL,\n" +
+				"  surname varchar(255) default NULL,\n" +
+				"  givenName varchar(255) default NULL,\n" +
+				"  courseId varchar(255) default NULL,\n" +
+				"  PRIMARY KEY (uid, courseId)\n" +
+				");\n\n";
+			}		
+
+
+
+			function formatSqlSubjects(person, tableName) {
+				var template = 
+					"INSERT INTO " + tableName + " (uid, surname, givenName, courseId) " +
+					"VALUES ('<uid>','<surname>','<givenName>','<courseId>');\n";
+
+				var output = "";
+
+				for (i=0; i < person.courses.length; i++) {
+					temp = template.replace(/<uid>/g, person.uid);
+					temp = temp.replace(/<surname>/g, person.surname);
+					temp = temp.replace(/<givenName>/g, person.givenName);
+					temp = temp.replace(/<courseId>/g, person.courses[i]);
+					output += temp;
+				}
+
+				return output;
+			}
+
+			function formatSqlCourses(person) {
+				var output = 
+					"";
+
+				output = output.replace(/<uid>/g, person.uid);
+				output = output.replace(/<surname>/g, person.surname);
+				output = output.replace(/<givenName>/g, person.givenName);
+				
+				return output;
+			}
+
+			function selectUnduplicated(source, max) {
+				var output = [];
+
+				count = Math.floor(Math.random() * max) + 1;
+
+				while (output.length < count) {
+					item = source[Math.floor(Math.random() * source.length)];
+
+					if (output.indexOf(item) == -1) {
+						output.push(item);
+					}
+				}
+
+				return output;
+			}
+		</script>
+	</head>
+	<body>
+		<form>
+			Number of Subjects: <input type="text" name="count" id="count" value="10"/> <br />
+			Table Name: <input type="text" name="table_name" id="table_name" value="SIS_Courses"/> <br />
+			People OU: <input type="text" name="people_ou" id="people_ou" value="ou=People,dc=example,dc=edu"/> <br />
+			<input type="button" onclick="generateData(); return false;" value="Run" /> <br />
+		</form>
+
+		Ldif: <br /><textarea cols="100" rows="15" id="ldif"></textarea><br />
+		Sql: <br /><textarea cols="100" rows="15" id="sql"></textarea> <br />
+	</body>
+</html>

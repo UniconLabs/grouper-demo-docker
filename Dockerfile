@@ -10,8 +10,9 @@ RUN apt-get update \
     && apt-get install -y slapd wget tar unzip dos2unix expect
 
 RUN java_version=7u75; \
-    tomcat_version=7.0.55; \    
-    wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+    tomcat_version=7.0.55; \
+    echo 'Downloading the JDK...' \    
+    && wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
     http://download.oracle.com/otn-pub/java/jdk/$java_version-b13/jdk-$java_version-linux-x64.tar.gz \
     && echo 'Downloading Tomcat...'\
     && wget -q https://archive.apache.org/dist/tomcat/tomcat-7/v$tomcat_version/bin/apache-tomcat-$tomcat_version.zip \
