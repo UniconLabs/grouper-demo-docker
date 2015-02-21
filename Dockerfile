@@ -7,20 +7,20 @@ ENV ANT_HOME /opt/apache-ant-1.9.4
 ENV PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin
 
 RUN apt-get update \
-    && apt-get install -y slapd wget tar unzip dos2unix expect
+    && apt-get install -y slapd wget -q tar unzip dos2unix expect
 
 RUN java_version=7u75; \
     tomcat_version=7.0.55; \    
-    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+    wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
     http://download.oracle.com/otn-pub/java/jdk/$java_version-b13/jdk-$java_version-linux-x64.tar.gz \
-    && wget https://archive.apache.org/dist/tomcat/tomcat-7/v$tomcat_version/bin/apache-tomcat-$tomcat_version.zip \
-    && wget http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip \
-    && wget http://software.internet2.edu/grouper/release/2.2.1/grouperInstaller.jar \
-    && wget http://software.internet2.edu/grouper/release/2.2.1/grouper.apiBinary-2.2.1.tar.gz \
-    && wget http://software.internet2.edu/grouper/release/2.2.1/grouper.ui-2.2.1.tar.gz \
-    && wget http://software.internet2.edu/grouper/release/2.2.1/grouper.ws-2.2.1.tar.gz \
-    && wget http://software.internet2.edu/grouper/release/2.2.1/grouper.psp-2.2.1.tar.gz \
-    && wget http://software.internet2.edu/grouper/release/2.2.1/quickstart.xml \
+    && wget -q https://archive.apache.org/dist/tomcat/tomcat-7/v$tomcat_version/bin/apache-tomcat-$tomcat_version.zip \
+    && wget -q http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip \
+    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouperInstaller.jar \
+    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.apiBinary-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ui-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ws-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.psp-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/2.2.1/quickstart.xml \
     \
     && echo "6f1f81030a34f7a9c987f8b68a24d139  jdk-$java_version-linux-x64.tar.gz" | md5sum -c - \
     && tar -zxvf jdk-$java_version-linux-x64.tar.gz -C /opt \
