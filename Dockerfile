@@ -7,7 +7,7 @@ ENV ANT_HOME /opt/apache-ant-1.9.4
 ENV PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin
 
 RUN apt-get update \
-    && apt-get install -y slapd wget -q tar unzip dos2unix expect
+    && apt-get install -y slapd wget tar unzip dos2unix expect
 
 RUN java_version=7u75; \
     tomcat_version=7.0.55; \    
