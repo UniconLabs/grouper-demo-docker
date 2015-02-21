@@ -1,20 +1,24 @@
 ## Overview
-This Docker image contains a fully built Ldap, Shib, and Grouper environment.
+This Docker image contains a fully built Ldap, MySql, and Grouper environment.
 
-This does not follow best practices. It is intended from demo/class usage.
+This image does not follow best Docker practices. It is intended from demo/class usage.
 
 ## Running
-> Needs to be updated.
+
+To run the container:
+
 ```
-$ docker run -dP --name="idp-test" -v ~/docker/shib-config:/external-mount jtgasper3/docker-shibboleth-idp 
+$ docker run -d -p 10389:389 -p 8080:8080 --name="grouper" jtgasper3/grouper-demo
 ```
+
+You can log into the Grouper UI with "banderson/password". The account is a sysadmin. Also available is "jsmith/password", which has no explicit privs.
 
 ## Building
 
 From source:
 
 ```
-$ docker build --tag="org_id/grouper-demo" github.com/UniconLabs/grouper-demo-docker
+$ docker build --tag="jtgasper3/grouper-demo" github.com/UniconLabs/grouper-demo-docker
 ```
 
 ## Author
