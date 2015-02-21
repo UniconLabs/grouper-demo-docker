@@ -13,13 +13,21 @@ RUN java_version=7u75; \
     tomcat_version=7.0.55; \    
     wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
     http://download.oracle.com/otn-pub/java/jdk/$java_version-b13/jdk-$java_version-linux-x64.tar.gz \
+    && echo 'Downloading Tomcat...'\
     && wget -q https://archive.apache.org/dist/tomcat/tomcat-7/v$tomcat_version/bin/apache-tomcat-$tomcat_version.zip \
+    && echo 'Downloading Ant...'\
     && wget -q http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip \
+    && echo 'Downloading grouper installer...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouperInstaller.jar \
+    && echo 'Downloading grouper API...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.apiBinary-2.2.1.tar.gz \
+    && echo 'Downloading grouper UI...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ui-2.2.1.tar.gz \
+    && echo 'Downloading grouper Web Services...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ws-2.2.1.tar.gz \
+    && echo 'Downloading grouper PSP...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.psp-2.2.1.tar.gz \
+    && echo 'Downloading grouper Quickstart...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/quickstart.xml \
     \
     && echo "6f1f81030a34f7a9c987f8b68a24d139  jdk-$java_version-linux-x64.tar.gz" | md5sum -c - \
@@ -39,6 +47,7 @@ RUN java_version=7u75; \
     && tar -zxvf grouper.ui-2.2.1.tar.gz -C /opt \
     && tar -zxvf grouper.ws-2.2.1.tar.gz -C /opt \
     && tar -zxvf grouper.psp-2.2.1.tar.gz -C /opt \
+    && cp -R /opt/grouper.psp-2.2.1/lib/custom/* /opt/grouper.apiBinary-2.2.1/lib/custom \
     && rm grouper.apiBinary-2.2.1.tar.gz grouper.ui-2.2.1.tar.gz grouper.ws-2.2.1.tar.gz grouper.psp-2.2.1.tar.gz
  
 
