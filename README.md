@@ -8,7 +8,7 @@ This image does not follow best Docker practices. It is intended from demo/class
 To run the container:
 
 ```
-$ docker run -d -p 10389:389 -p 8080:8080 --name="grouper" jtgasper3/grouper-demo
+$ docker run -d -p 10389:389 -p 8080:8080 -p 3306:3306 --name="grouper" jtgasper3/grouper-demo
 ```
 
 You can log into the Grouper UI with "banderson/password". The account is a sysadmin. Also available is "jsmith/password", which has no explicit privs.
