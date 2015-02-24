@@ -13,6 +13,8 @@ $ docker run -d -p 10389:389 -p 8080:8080 -p 3306:3306 --name="grouper" jtgasper
 
 You can log into the Grouper UI with "banderson/password". The account is a sysadmin. Also available is "jsmith/password", which has no explicit privs.
 
+The LDAP admin bind account is "cn=admin,dc=example,dc=edu/password". The MySql admin account is "root/<nopassword>".
+
 ## Building
 
 From source:
