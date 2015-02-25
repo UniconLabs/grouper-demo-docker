@@ -101,6 +101,15 @@ RUN set -x; \
     && expect /opt/patch-scripts/ui-patch \
     && rm -fr /tmp/grp-ui /grouperInstaller.jar
 
+ADD grouper.ws-2.2.1 /opt/grouper.ws-2.2.1/ 
+
+RUN JAVA_HOME=/opt/jdk1.7.0_75; \
+    cd /opt/grouper.ws-2.2.1/grouper-ws/ \
+    && /opt/apache-ant-1.9.4/bin/ant dist \
+    && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.43/webapps \
+    && wget http://software.internet2.edu/grouper/release/2.2.1/grouper.clientBinary-2.2.1.tar.gz \
+    && tar -zxvf grouper.clientBinary-2.2.1.tar.gz -C /opt
+
 EXPOSE 389 3306 8080
 
 CMD ["run-grouper.sh"]
