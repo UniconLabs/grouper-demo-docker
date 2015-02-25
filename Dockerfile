@@ -101,15 +101,25 @@ RUN set -x; \
     && expect /opt/patch-scripts/ui-patch \
     && rm -fr /tmp/grp-ui /grouperInstaller.jar
 
+#Trying not to bust the image cache... the following ADD and RUN should be moved above later.
 ADD grouper.ws-2.2.1 /opt/grouper.ws-2.2.1/ 
+ADD grouper.clientBinary-2.2.1 /opt/grouper.clientBinary-2.2.1/ 
+ADD bin/ /opt/apache-tomcat-6.0.43/bin
 
 RUN JAVA_HOME=/opt/jdk1.7.0_75; \
     cd /opt/grouper.ws-2.2.1/grouper-ws/ \
     && /opt/apache-ant-1.9.4/bin/ant dist \
     && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.43/webapps \
     && wget http://software.internet2.edu/grouper/release/2.2.1/grouper.clientBinary-2.2.1.tar.gz \
-    && tar -zxvf grouper.clientBinary-2.2.1.tar.gz -C /opt
+    && tar -zxvf grouper.clientBinary-2.2.1.tar.gz -C /opt \
+    && chmod +x /opt/apache-tomcat-6.0.43/bin/setenv.sh \
+    && /opt/apache-tomcat-6.0.43/bin/startup.sh \
+    && sleep 20s \
+    && /opt/apache-tomcat-6.0.43/bin/shutdown.sh 
+    
 
 EXPOSE 389 3306 8080
 
 CMD ["run-grouper.sh"]
+
+#/opt/jdk1.7.0_75/bin/java -jar grouperClient.jar --operation=hasMemberWs --groupName=
