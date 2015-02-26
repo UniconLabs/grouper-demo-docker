@@ -25,6 +25,8 @@ RUN java_version=7u75; \
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ui-2.2.1.tar.gz \
     && echo 'Downloading grouper Web Services...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ws-2.2.1.tar.gz \
+    && echo 'Downloading grouper client...'\
+    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.clientBinary-2.2.1.tar.gz \
     && echo 'Downloading grouper PSP...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.psp-2.2.1.tar.gz \
     && echo 'Downloading grouper Quickstart...'\
@@ -46,9 +48,10 @@ RUN java_version=7u75; \
     && tar -zxvf grouper.apiBinary-2.2.1.tar.gz -C /opt \
     && tar -zxvf grouper.ui-2.2.1.tar.gz -C /opt \
     && tar -zxvf grouper.ws-2.2.1.tar.gz -C /opt \
+    && tar -zxvf grouper.clientBinary-2.2.1.tar.gz -C /opt \
     && tar -zxvf grouper.psp-2.2.1.tar.gz -C /opt \
     && cp -R /opt/grouper.psp-2.2.1/lib/custom/* /opt/grouper.apiBinary-2.2.1/lib/custom \
-    && rm grouper.apiBinary-2.2.1.tar.gz grouper.ui-2.2.1.tar.gz grouper.ws-2.2.1.tar.gz grouper.psp-2.2.1.tar.gz
+    && rm grouper.apiBinary-2.2.1.tar.gz grouper.ui-2.2.1.tar.gz grouper.ws-2.2.1.tar.gz grouper.psp-2.2.1.tar.gz grouper.clientBinary-2.2.1.tar.gz
  
 ADD seed-data/ /
 
@@ -76,10 +79,6 @@ RUN service slapd start \
     && ldapadd -Y EXTERNAL -H ldapi:/// -f eduPerson.schema \
     && ldapadd -H ldapi:/// -f users.ldif -x -D "cn=admin,dc=example,dc=edu" -w password \
     && rm /*.ldif /eduPerson.schema quickstart.xml
-
-RUN JAVA_HOME=/opt/jdk1.7.0_75; \
-    wget http://software.internet2.edu/grouper/release/2.2.1/grouper.clientBinary-2.2.1.tar.gz \
-    && tar -zxvf grouper.clientBinary-2.2.1.tar.gz -C /opt
     
 ADD opt/ /opt/
 
