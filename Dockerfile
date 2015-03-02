@@ -89,11 +89,11 @@ RUN set -x; \
     service mysql start \
     && service slapd start \
     && cd /opt/grouper.apiBinary-2.2.1 \
+    && mkdir /tmp/grp-api/ /tmp/grp-ui/ /tmp/grp-psp/ /tmp/grp-ws/ \
+    && expect /opt/patch-scripts/api-patch \
     && bin/gsh -registry -check -runscript -noprompt \
     && bin/gsh /bootstrap.gsh \
-    && mkdir /tmp/grp-api/ \
-    && expect /opt/patch-scripts/api-patch \
-    && rm -fr /tmp/grp-api/ \
+    && expect /opt/patch-scripts/psp-patch \
     && cd /opt/grouper.ui-2.2.1 \
     && /opt/apache-ant-1.9.4/bin/ant war \
     && cp dist/grouper.war /opt/apache-tomcat-6.0.43/webapps \
@@ -103,9 +103,9 @@ RUN set -x; \
     && /opt/apache-tomcat-6.0.43/bin/startup.sh \
     && sleep 20s \
     && /opt/apache-tomcat-6.0.43/bin/shutdown.sh \
-    && mkdir /tmp/grp-ui/ \
     && expect /opt/patch-scripts/ui-patch \
-    && rm -fr /tmp/grp-ui /grouperInstaller.jar    
+    && expect /opt/patch-scripts/ws-patch \
+    && rm -fr /tmp/grp-ui/ /tmp/grp-api//tmp/grp-psp/ /tmp/grp-ws/ /opt/apache-tomcat-6.0.43/work/
 
 EXPOSE 389 3306 8080
 

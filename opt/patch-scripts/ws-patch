@@ -6,13 +6,13 @@ expect "\[install\]:"
 send "patch\r"
 
 expect "\[/\]:"
-send "/tmp/grp-api\r"
+send "/tmp/grp-ws\r"
 
 expect "What do you want to patch?  api, ui, ws, or psp?"
-send "api\r"
+send "ws\r"
 
-expect "Where is the grouper API installed?"
-send "/opt/grouper.apiBinary-2.2.1\r"
+expect "Where is the grouper PSP installed?"
+send "/opt/apache-tomcat-6.0.43/webapps/grouper-ws/\r"
 
 expect "What do you want to do with patches (install, revert, status)?"
 send "\r"

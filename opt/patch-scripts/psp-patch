@@ -1,0 +1,17 @@
+set timeout 2
+
+spawn /opt/jdk1.7.0_75/bin/java -jar /grouperInstaller.jar
+
+expect "\[install\]:"
+send "patch\r"
+
+expect "\[/\]:"
+send "/tmp/grp-psp\r"
+
+expect "What do you want to patch?  api, ui, ws, or psp?"
+send "psp\r"
+
+expect "Where is the grouper PSP installed?"
+send "/opt/grouper.apiBinary-2.2.1/\r"
+
+expect eof

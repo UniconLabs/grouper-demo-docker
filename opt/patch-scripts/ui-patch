@@ -35,6 +35,9 @@ send "\r"
 expect "Would you like to install patch grouper_v2_2_1_api_patch_4 (t|f)?"
 send "\r"
 
+expect "Would you like to install patch grouper_v2_2_1_api_patch_5 (t|f)?"
+send "\r"
+
 expect "Would you like to install patch grouper_v2_2_1_ui_patch_0 (t|f)?"
 send "\r"
 
@@ -63,6 +66,15 @@ expect "Would you like to install patch grouper_v2_2_1_ui_patch_8 (t|f)?"
 send "\r"
 
 expect "Would you like to install patch grouper_v2_2_1_ui_patch_9 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_ui_patch_10 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_ui_patch_11 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_ui_patch_12 (t|f)?"
 send "\r"
 
 expect "Hit <enter> to continue:"
