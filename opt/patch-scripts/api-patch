@@ -38,4 +38,8 @@ send "\r"
 expect "Would you like to install patch grouper_v2_2_1_api_patch_5 (t|f)?"
 send "\r"
 
+expect "Would you like to install patch grouper_v2_2_1_api_patch_6 (t|f)?"
+send "\r"
+
+
 expect eof

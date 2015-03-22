@@ -14,4 +14,7 @@ send "psp\r"
 expect "Where is the grouper PSP installed?"
 send "/opt/grouper.apiBinary-2.2.1/\r"
 
+expect "What do you want to do with patches (install, revert, status)?"
+send "\r"
+
 expect eof
