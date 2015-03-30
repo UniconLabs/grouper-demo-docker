@@ -8,7 +8,7 @@ This image does not follow best Docker practices. It is intended from demo/class
 To run the container:
 
 ```
-$ docker run -d -p 10389:389 -p 8080:8080 -p 3306:3306 --name="grouper" unicon/grouper-demo
+$ docker run -d -p 10389:389 -p 8080:8080 -p 3306:3306 --name="grouper" uniconiam/grouper-demo
 ```
 
 You can log into the Grouper UI with "banderson/password". The account is a sysadmin. Also available is "jsmith/password", which has no explicit privs.
@@ -20,7 +20,7 @@ The LDAP admin bind account is "cn=admin,dc=example,dc=edu/password". The MySql 
 From source:
 
 ```
-$ docker build --tag="jtgasper3/grouper-demo" github.com/UniconLabs/grouper-demo-docker
+$ docker build --tag="uniconiam/grouper-demo" github.com/UniconLabs/grouper-demo-docker
 ```
 
 ## Authors
@@ -30,7 +30,7 @@ $ docker build --tag="jtgasper3/grouper-demo" github.com/UniconLabs/grouper-demo
 
 ## LICENSE
 
-Copyright 2014 Unicon, Inc
+Copyright 2015 Unicon, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
