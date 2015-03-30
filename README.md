@@ -23,13 +23,14 @@ From source:
 $ docker build --tag="jtgasper3/grouper-demo" github.com/UniconLabs/grouper-demo-docker
 ```
 
-## Author
+## Authors
 
   * John Gasper (<jgasper@unicon.net>)
+  * David Langenberg (<dlangenberg@unicon.net>)
 
 ## LICENSE
 
-Copyright 2014 John Gasper
+Copyright 2014 Unicon, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
