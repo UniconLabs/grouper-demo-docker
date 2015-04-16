@@ -2,17 +2,17 @@ FROM ubuntu
 
 MAINTAINER John Gasper <jgasper@unicon.net>
 
-ENV JAVA_HOME /opt/jdk1.7.0_75
+ENV JAVA_HOME /opt/jdk1.7.0_79
 ENV ANT_HOME /opt/apache-ant-1.9.4
 ENV PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin
 
 RUN apt-get update \
     && apt-get install -y slapd wget tar unzip dos2unix expect
 
-RUN java_version=7u75; \    
+RUN java_version=7u79; \    
     echo 'Downloading the JDK...' \    
     && wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-    http://download.oracle.com/otn-pub/java/jdk/$java_version-b13/jdk-$java_version-linux-x64.tar.gz \
+    http://download.oracle.com/otn-pub/java/jdk/$java_version-b15/jdk-$java_version-linux-x64.tar.gz \
     && echo 'Downloading Tomcat...'\
     && wget -q http://www.eng.lsu.edu/mirrors/apache/tomcat/tomcat-6/v6.0.43/bin/apache-tomcat-6.0.43.zip \
     && echo 'Downloading Ant...'\
@@ -32,7 +32,7 @@ RUN java_version=7u75; \
     && echo 'Downloading grouper Quickstart...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/quickstart.xml \
     \
-    && echo "6f1f81030a34f7a9c987f8b68a24d139  jdk-$java_version-linux-x64.tar.gz" | md5sum -c - \
+    && echo "9222e097e624800fdd9bfb568169ccad  jdk-$java_version-linux-x64.tar.gz" | md5sum -c - \
     && tar -zxvf jdk-$java_version-linux-x64.tar.gz -C /opt \
     && rm jdk-$java_version-linux-x64.tar.gz \ 
     \
@@ -85,7 +85,7 @@ ADD opt/ /opt/
 RUN set -x; \
     chmod -R +x /opt/container-scripts/; \
     chmod -R +x /opt/apache-tomcat-6.0.43/bin/*.sh; \
-    JAVA_HOME=/opt/jdk1.7.0_75; \
+    JAVA_HOME=/opt/jdk1.7.0_79; \
     service mysql start \
     && service slapd start \
     && cd /opt/grouper.apiBinary-2.2.1 \
