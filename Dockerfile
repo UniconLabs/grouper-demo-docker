@@ -88,18 +88,19 @@ RUN set -x; \
     JAVA_HOME=/opt/jdk1.7.0_79; \
     service mysql start \
     && service slapd start \
-    && cd /opt/grouper.apiBinary-2.2.1 \
-    && mkdir /tmp/grp-api/ /tmp/grp-ui/ /tmp/grp-psp/ /tmp/grp-ws/ \
-    && expect /opt/patch-scripts/api-patch \
-    && bin/gsh -registry -check -runscript -noprompt \
-    && bin/gsh /bootstrap.gsh \
-    && expect /opt/patch-scripts/psp-patch \
+    && echo Building the wars before patching so embedded api patching works properly \
     && cd /opt/grouper.ui-2.2.1 \
     && /opt/apache-ant-1.9.4/bin/ant war \
     && cp dist/grouper.war /opt/apache-tomcat-6.0.43/webapps \
     && cd /opt/grouper.ws-2.2.1/grouper-ws/ \
     && /opt/apache-ant-1.9.4/bin/ant dist \
-    && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.43/webapps \    
+    && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.43/webapps \ 
+    && mkdir /tmp/grp-api/ /tmp/grp-ui/ /tmp/grp-psp/ /tmp/grp-ws/ \   
+    && expect /opt/patch-scripts/api-patch \
+    && cd /opt/grouper.apiBinary-2.2.1 \
+    && bin/gsh -registry -check -runscript -noprompt \
+    && bin/gsh /bootstrap.gsh \
+    && expect /opt/patch-scripts/psp-patch \
     && /opt/apache-tomcat-6.0.43/bin/startup.sh \
     && sleep 20s \
     && /opt/apache-tomcat-6.0.43/bin/shutdown.sh \
