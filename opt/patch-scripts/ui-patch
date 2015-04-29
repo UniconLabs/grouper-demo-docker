@@ -86,6 +86,9 @@ send "\r"
 expect "Would you like to install patch grouper_v2_2_1_ui_patch_14 (t|f)?"
 send "\r"
 
+expect "Would you like to install patch grouper_v2_2_1_ui_patch_15 (t|f)?"
+send "\r"
+
 expect "Hit <enter> to continue:"
 send "\r"
 
