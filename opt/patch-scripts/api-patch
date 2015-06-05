@@ -41,5 +41,23 @@ send "\r"
 expect "Would you like to install patch grouper_v2_2_1_api_patch_6 (t|f)?"
 send "\r"
 
+expect "Would you like to install patch grouper_v2_2_1_api_patch_7 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_8 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_9 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_10 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_11 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_12 (t|f)?"
+send "\r"
+
 
 expect eof

@@ -3,7 +3,7 @@ FROM ubuntu
 MAINTAINER John Gasper <jgasper@unicon.net>
 
 ENV JAVA_HOME /opt/jdk1.7.0_79
-ENV ANT_HOME /opt/apache-ant-1.9.4
+ENV ANT_HOME /opt/apache-ant-1.9.5
 ENV PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin
 
 RUN apt-get update \
@@ -14,9 +14,9 @@ RUN java_version=7u79; \
     && wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
     http://download.oracle.com/otn-pub/java/jdk/$java_version-b15/jdk-$java_version-linux-x64.tar.gz \
     && echo 'Downloading Tomcat...'\
-    && wget -q http://www.eng.lsu.edu/mirrors/apache/tomcat/tomcat-6/v6.0.43/bin/apache-tomcat-6.0.43.zip \
+    && wget -q http://www.us.apache.org/dist/tomcat/tomcat-6/v6.0.44/bin/apache-tomcat-6.0.44.zip \
     && echo 'Downloading Ant...'\
-    && wget -q http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip \
+    && wget -q http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.5-bin.zip \
     && echo 'Downloading grouper installer...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouperInstaller.jar \
     && echo 'Downloading grouper API...'\
@@ -33,23 +33,23 @@ RUN java_version=7u79; \
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/quickstart.xml \
     \
     && echo "9222e097e624800fdd9bfb568169ccad  jdk-$java_version-linux-x64.tar.gz" | md5sum -c - \
-    && tar -zxvf jdk-$java_version-linux-x64.tar.gz -C /opt \
+    && tar -zxvf jdk-$java_version-linux-x64.tar.gz -C /opt 1>/dev/null \
     && rm jdk-$java_version-linux-x64.tar.gz \ 
     \
-    && echo "314ae7781516a678f44e3067e0006c35  apache-tomcat-6.0.43.zip" | md5sum -c - \
-    && unzip apache-tomcat-6.0.43.zip -d /opt \    
-    && rm apache-tomcat-6.0.43.zip \
+    && echo "409e93f383ec476cde4c9b87f2427dbf  apache-tomcat-6.0.44.zip" | md5sum -c - \
+    && unzip apache-tomcat-6.0.44.zip -d /opt 1>/dev/null \    
+    && rm apache-tomcat-6.0.44.zip \
     \
-    && unzip apache-ant-1.9.4-bin.zip -d /opt \
-    && echo "ec57a35eb869a307abdfef8712f3688fff70887f  apache-ant-1.9.4-bin.zip" | sha1sum -c - \
-    && rm apache-ant-1.9.4-bin.zip \
-    && chmod +x /opt/apache-ant-1.9.4/bin/ant \
+    && unzip apache-ant-1.9.5-bin.zip -d /opt 1>/dev/null \
+    && echo "8c4193db6ac91c3f792a04715f8e9a82ef628daf  apache-ant-1.9.5-bin.zip" | sha1sum -c - \
+    && rm apache-ant-1.9.5-bin.zip \
+    && chmod +x /opt/apache-ant-1.9.5/bin/ant \
     \
-    && tar -zxvf grouper.apiBinary-2.2.1.tar.gz -C /opt \
-    && tar -zxvf grouper.ui-2.2.1.tar.gz -C /opt \
-    && tar -zxvf grouper.ws-2.2.1.tar.gz -C /opt \
-    && tar -zxvf grouper.clientBinary-2.2.1.tar.gz -C /opt \
-    && tar -zxvf grouper.psp-2.2.1.tar.gz -C /opt \
+    && tar -zxf grouper.apiBinary-2.2.1.tar.gz -C /opt \
+    && tar -zxf grouper.ui-2.2.1.tar.gz -C /opt \
+    && tar -zxf grouper.ws-2.2.1.tar.gz -C /opt \
+    && tar -zxf grouper.clientBinary-2.2.1.tar.gz -C /opt \
+    && tar -zxf grouper.psp-2.2.1.tar.gz -C /opt \
     && cp -R /opt/grouper.psp-2.2.1/lib/custom/* /opt/grouper.apiBinary-2.2.1/lib/custom \
     && rm grouper.apiBinary-2.2.1.tar.gz grouper.ui-2.2.1.tar.gz grouper.ws-2.2.1.tar.gz grouper.psp-2.2.1.tar.gz grouper.clientBinary-2.2.1.tar.gz
  
@@ -77,36 +77,38 @@ RUN service slapd start \
     && chown -R openldap /var/ldap \
     && ldapadd -Y EXTERNAL -H ldapi:/// -f init.ldif \
     && ldapadd -Y EXTERNAL -H ldapi:/// -f eduPerson.schema \
-    && ldapadd -H ldapi:/// -f users.ldif -x -D "cn=admin,dc=example,dc=edu" -w password \
+    && ldapadd -H ldapi:/// -f users.ldif -x -D "cn=admin,dc=example,dc=edu" -w password 1>/dev/null \
     && rm /*.ldif /eduPerson.schema quickstart.xml
     
 ADD opt/ /opt/
 
 RUN set -x; \
     chmod -R +x /opt/container-scripts/; \
-    chmod -R +x /opt/apache-tomcat-6.0.43/bin/*.sh; \
+    chmod -R +x /opt/apache-tomcat-6.0.44/bin/*.sh; \
     JAVA_HOME=/opt/jdk1.7.0_79; \
     service mysql start \
     && service slapd start \
     && echo Building the wars before patching so embedded api patching works properly \
     && cd /opt/grouper.ui-2.2.1 \
-    && /opt/apache-ant-1.9.4/bin/ant war \
-    && cp dist/grouper.war /opt/apache-tomcat-6.0.43/webapps \
+    && /opt/apache-ant-1.9.5/bin/ant war \
+    && cp dist/grouper.war /opt/apache-tomcat-6.0.44/webapps \
     && cd /opt/grouper.ws-2.2.1/grouper-ws/ \
-    && /opt/apache-ant-1.9.4/bin/ant dist \
-    && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.43/webapps \ 
+    && /opt/apache-ant-1.9.5/bin/ant dist \
+    && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.44/webapps \ 
+    && cd /opt/grouper.apiBinary-2.2.1 \
+    && bin/gsh -registry -check -runscript -noprompt \
     && mkdir /tmp/grp-api/ /tmp/grp-ui/ /tmp/grp-psp/ /tmp/grp-ws/ \   
     && expect /opt/patch-scripts/api-patch \
     && cd /opt/grouper.apiBinary-2.2.1 \
     && bin/gsh -registry -check -runscript -noprompt \
     && bin/gsh /bootstrap.gsh \
     && expect /opt/patch-scripts/psp-patch \
-    && /opt/apache-tomcat-6.0.43/bin/startup.sh \
+    && /opt/apache-tomcat-6.0.44/bin/startup.sh \
     && sleep 20s \
-    && /opt/apache-tomcat-6.0.43/bin/shutdown.sh \
+    && /opt/apache-tomcat-6.0.44/bin/shutdown.sh \
     && expect /opt/patch-scripts/ui-patch \
     && expect /opt/patch-scripts/ws-patch \
-    && rm -fr /tmp/grp-ui/ /tmp/grp-api//tmp/grp-psp/ /tmp/grp-ws/ /opt/apache-tomcat-6.0.43/work/
+    && rm -fr /tmp/grp-ui/ /tmp/grp-api//tmp/grp-psp/ /tmp/grp-ws/ /opt/apache-tomcat-6.0.44/work/
 
 EXPOSE 389 3306 8080
 

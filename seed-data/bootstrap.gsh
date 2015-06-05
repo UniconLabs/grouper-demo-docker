@@ -1,4 +1,4 @@
-GrouperSession.startRootSession()
+gs = GrouperSession.startRootSession()
 
 addMember("etc:sysadmingroup","banderson");
 
@@ -22,3 +22,16 @@ setGroupAttr("loader:coursesLoader", "grouperLoaderType", "SQL_GROUP_LIST");
 setGroupAttr("loader:coursesLoader", "grouperLoaderScheduleType", "CRON");
 setGroupAttr("loader:coursesLoader", "grouperLoaderQuartzCron", "0 * * * * ?");
 setGroupAttr("loader:coursesLoader", "grouperLoaderQuery", "select distinct uid as SUBJECT_ID, CONCAT('courses:', courseID) as GROUP_NAME from SIS_COURSES");
+
+group = new GroupSave(gs).assignName("loader:affiliationLoader").assignCreateParentStemsIfNotExist(true).save();
+attributeAssign = group.getAttributeDelegate().assignAttribute(LoaderLdapUtils.grouperLoaderLdapAttributeDefName()).getAttributeAssign();
+attributeAssign = group.getAttributeDelegate().retrieveAssignment(null, LoaderLdapUtils.grouperLoaderLdapAttributeDefName(), false, true);
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapTypeName(), "LDAP_GROUPS_FROM_ATTRIBUTES");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapFilterName(), "(eduPersonAffiliation=*)");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapQuartzCronName(), "0 * * * * ?");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapSearchDnName(), "ou=People,dc=example,dc=edu");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapSubjectAttributeName(), "uid");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapSubjectIdTypeName(), "subjectId");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapServerIdName(), "demo");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapGroupNameExpressionName(), "affiliations:${groupAttribute}");
+attributeAssign.getAttributeValueDelegate().assignValue(LoaderLdapUtils.grouperLoaderLdapSubjectExpressionName(), "${subjectAttributes['subjectId']}");

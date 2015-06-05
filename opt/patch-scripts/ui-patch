@@ -12,7 +12,7 @@ expect "What do you want to patch?  api, ui, ws, or psp?"
 send "ui\r"
 
 expect "Where is the grouper UI installed?"
-send "/opt/apache-tomcat-6.0.43/webapps/grouper/\r"
+send "/opt/apache-tomcat-6.0.44/webapps/grouper/\r"
 
 expect "What do you want to do with patches (install, revert, status)?"
 send "\r"
@@ -39,6 +39,24 @@ expect "Would you like to install patch grouper_v2_2_1_api_patch_5 (t|f)?"
 send "\r"
 
 expect "Would you like to install patch grouper_v2_2_1_api_patch_6 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_7 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_8 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_9 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_10 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_11 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_12 (t|f)?"
 send "\r"
 
 expect "Would you like to install patch grouper_v2_2_1_ui_patch_0 (t|f)?"
@@ -89,7 +107,17 @@ send "\r"
 expect "Would you like to install patch grouper_v2_2_1_ui_patch_15 (t|f)?"
 send "\r"
 
-expect "Hit <enter> to continue:"
+expect "Would you like to install patch grouper_v2_2_1_ui_patch_16 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_ui_patch_17 (t|f)?"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_ui_patch_18 (t|f)?"
+send "\r"
+
+expect "Hit <enter> to continue"
 send "\r"
 
 expect eof
+
