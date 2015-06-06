@@ -14,9 +14,9 @@ RUN java_version=7u79; \
     && wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
     http://download.oracle.com/otn-pub/java/jdk/$java_version-b15/jdk-$java_version-linux-x64.tar.gz \
     && echo 'Downloading Tomcat...'\
-    && wget -q http://www.us.apache.org/dist/tomcat/tomcat-6/v6.0.44/bin/apache-tomcat-6.0.44.zip \
+    && wget -q https://archive.apache.org/dist/tomcat/tomcat-6/v6.0.44/bin/apache-tomcat-6.0.44.zip \
     && echo 'Downloading Ant...'\
-    && wget -q http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.5-bin.zip \
+    && wget -q https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.5-bin.zip \
     && echo 'Downloading grouper installer...'\
     && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouperInstaller.jar \
     && echo 'Downloading grouper API...'\
@@ -64,7 +64,7 @@ RUN \
   echo "mysqld_safe &" > /tmp/config && \
   echo "mysqladmin --silent --wait=30 ping || exit 1" >> /tmp/config && \
   echo "mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'" >> /tmp/config && \
-  echo "mysql -e 'CREATE DATABASE grouper;'" >> /tmp/config && \
+  echo "mysql -e 'CREATE DATABASE grouper CHARACTER SET utf8 COLLATE utf8_bin;'" >> /tmp/config && \
   bash /tmp/config && \
   rm -f /tmp/config && \
   mysql grouper < /sisData.sql \
