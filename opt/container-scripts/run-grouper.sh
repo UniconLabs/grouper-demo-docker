@@ -1,7 +1,7 @@
 #!/bin/sh
 set -x
 
-service mysql start
+mysqld_safe &
 
 service slapd start
 

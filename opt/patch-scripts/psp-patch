@@ -1,11 +1,11 @@
-set timeout 2
+set timeout 10
 
 spawn /opt/jdk1.7.0_79/bin/java -jar /grouperInstaller.jar
 
-expect "\[install\]:"
+expect "Do you want to 'install' a new installation of grouper"
 send "patch\r"
 
-expect "\[/\]:"
+expect "Enter in a Grouper temp directory to download tarballs"
 send "/tmp/grp-psp\r"
 
 expect "What do you want to patch?  api, ui, ws, or psp?"

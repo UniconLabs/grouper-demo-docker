@@ -25,8 +25,8 @@ $ docker build --tag="unicon/grouper-demo" github.com/UniconLabs/grouper-demo-do
 
 ## Authors
 
-  * John Gasper (<jgasper@unicon.net>)
-  * David Langenberg (<dlangenberg@unicon.net>)
+  * John Gasper (jgasper@unicon.net)
+  * David Langenberg (dlangenberg@unicon.net)
 
 ## LICENSE
 

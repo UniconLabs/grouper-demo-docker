@@ -1,11 +1,11 @@
-set timeout 2
+set timeout 5
 
 spawn /opt/jdk1.7.0_79/bin/java -jar /grouperInstaller.jar
 
-expect "\[install\]:"
+expect "Do you want to 'install' a new installation of grouper"
 send "patch\r"
 
-expect "\[/\]:"
+expect "Enter in a Grouper temp directory to download tarballs"
 send "/tmp/grp-ws\r"
 
 expect "What do you want to patch?  api, ui, ws, or psp?"
@@ -17,52 +17,88 @@ send "/opt/apache-tomcat-6.0.44/webapps/grouper-ws/\r"
 expect "What do you want to do with patches (install, revert, status)?"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_0 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_0"
 send "\r"
 
 expect "<enter> to continue."
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_1 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_1"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_2 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_2"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_3 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_3"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_4 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_4"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_5 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_5"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_6 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_6"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_7 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_7"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_8 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_8"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_9 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_9"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_10 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_10"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_11 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_11"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_12 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_12"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_api_patch_13 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_13"
 send "\r"
 
-expect "Would you like to install patch grouper_v2_2_1_ws_patch_0 (t|f)?"
+expect "Would you like to install patch grouper_v2_2_1_api_patch_14"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_15"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_16"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_17"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_18"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_19"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_20"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_21"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_22"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_23"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_24"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_api_patch_25"
+send "\r"
+
+expect "Would you like to install patch grouper_v2_2_1_ws_patch_0"
 send "\r"
 
 expect "Hit <enter> to continue"
