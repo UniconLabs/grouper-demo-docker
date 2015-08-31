@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:trusty
 
 MAINTAINER John Gasper <jgasper@unicon.net>
 
@@ -7,7 +7,7 @@ ENV ANT_HOME /opt/apache-ant-1.9.5
 ENV PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin
 
 RUN apt-get update \
-    && apt-get install -y slapd wget tar unzip dos2unix expect
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim
 
 RUN java_version=7u79; \    
     echo 'Downloading the JDK...' \    
@@ -56,11 +56,13 @@ RUN java_version=7u79; \
 ADD seed-data/ /
 
 #MySql shamelessly stolen from https://github.com/dockerfile/mysql/blob/master/Dockerfile
-# install slapd using debian unattended mode
 RUN \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.6 && \
   sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
   sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf && \
+  sed -i 's/\[mysqld\]/\[mysqld\]\ncharacter_set_server = utf8/' /etc/mysql/my.cnf && \
+  sed -i 's/\[mysqld\]/\[mysqld\]\ncollation_server = utf8_general_ci/' /etc/mysql/my.cnf && \
+  cat  /etc/mysql/my.cnf && \
   echo "mysqld_safe &" > /tmp/config && \
   echo "mysqladmin --silent --wait=30 ping || exit 1" >> /tmp/config && \
   echo "mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'" >> /tmp/config && \
@@ -70,7 +72,7 @@ RUN \
   mysql grouper < /sisData.sql \
   && echo 'slapd/root_password password password' | debconf-set-selections \
   && echo 'slapd/root_password_again password password' | debconf-set-selections \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -y ldap-utils slapd
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y ldap-utils
 
 RUN service slapd start \
     && mkdir -p /var/ldap/example \
@@ -86,8 +88,8 @@ RUN set -x; \
     chmod -R +x /opt/container-scripts/; \
     chmod -R +x /opt/apache-tomcat-6.0.44/bin/*.sh; \
     JAVA_HOME=/opt/jdk1.7.0_79; \
-    service mysql start \
-    && service slapd start \
+    service slapd start \
+    && service mysql start \
     && echo Building the wars before patching so embedded api patching works properly \
     && cd /opt/grouper.ui-2.2.1 \
     && /opt/apache-ant-1.9.5/bin/ant war \
