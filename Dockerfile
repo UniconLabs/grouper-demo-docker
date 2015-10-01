@@ -5,6 +5,7 @@ MAINTAINER John Gasper <jgasper@unicon.net>
 ENV JAVA_HOME /opt/jdk1.7.0_79
 ENV ANT_HOME /opt/apache-ant-1.9.5
 ENV PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin
+ENV GROUPER_VERSION 2.2.2
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim
@@ -18,19 +19,19 @@ RUN java_version=7u79; \
     && echo 'Downloading Ant...'\
     && wget -q https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.5-bin.zip \
     && echo 'Downloading grouper installer...'\
-    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouperInstaller.jar \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouperInstaller.jar \
     && echo 'Downloading grouper API...'\
-    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.apiBinary-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.apiBinary-2.2.2.tar.gz \
     && echo 'Downloading grouper UI...'\
-    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ui-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.ui-$GROUPER_VERSION.tar.gz \
     && echo 'Downloading grouper Web Services...'\
-    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.ws-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.ws-$GROUPER_VERSION.tar.gz \
     && echo 'Downloading grouper client...'\
-    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.clientBinary-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.clientBinary-$GROUPER_VERSION.tar.gz \
     && echo 'Downloading grouper PSP...'\
-    && wget -q http://software.internet2.edu/grouper/release/2.2.1/grouper.psp-2.2.1.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.psp-$GROUPER_VERSION.tar.gz \
     && echo 'Downloading grouper Quickstart...'\
-    && wget -q http://software.internet2.edu/grouper/release/2.2.1/quickstart.xml \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/quickstart.xml \
     \
     && echo "9222e097e624800fdd9bfb568169ccad  jdk-$java_version-linux-x64.tar.gz" | md5sum -c - \
     && tar -zxvf jdk-$java_version-linux-x64.tar.gz -C /opt 1>/dev/null \
@@ -45,13 +46,13 @@ RUN java_version=7u79; \
     && rm apache-ant-1.9.5-bin.zip \
     && chmod +x /opt/apache-ant-1.9.5/bin/ant \
     \
-    && tar -zxf grouper.apiBinary-2.2.1.tar.gz -C /opt \
-    && tar -zxf grouper.ui-2.2.1.tar.gz -C /opt \
-    && tar -zxf grouper.ws-2.2.1.tar.gz -C /opt \
-    && tar -zxf grouper.clientBinary-2.2.1.tar.gz -C /opt \
-    && tar -zxf grouper.psp-2.2.1.tar.gz -C /opt \
-    && cp -R /opt/grouper.psp-2.2.1/lib/custom/* /opt/grouper.apiBinary-2.2.1/lib/custom \
-    && rm grouper.apiBinary-2.2.1.tar.gz grouper.ui-2.2.1.tar.gz grouper.ws-2.2.1.tar.gz grouper.psp-2.2.1.tar.gz grouper.clientBinary-2.2.1.tar.gz
+    && tar -zxf grouper.apiBinary-$GROUPER_VERSION.tar.gz -C /opt \
+    && tar -zxf grouper.ui-$GROUPER_VERSION.tar.gz -C /opt \
+    && tar -zxf grouper.ws-$GROUPER_VERSION.tar.gz -C /opt \
+    && tar -zxf grouper.clientBinary-$GROUPER_VERSION.tar.gz -C /opt \
+    && tar -zxf grouper.psp-$GROUPER_VERSION.tar.gz -C /opt \
+    && cp -R /opt/grouper.psp-$GROUPER_VERSION/lib/custom/* /opt/grouper.apiBinary-$GROUPER_VERSION/lib/custom \
+    && rm grouper.apiBinary-$GROUPER_VERSION.tar.gz grouper.ui-$GROUPER_VERSION.tar.gz grouper.ws-$GROUPER_VERSION.tar.gz grouper.psp-$GROUPER_VERSION.tar.gz grouper.clientBinary-$GROUPER_VERSION.tar.gz
  
 ADD seed-data/ /
 
@@ -91,26 +92,35 @@ RUN set -x; \
     service slapd start \
     && service mysql start \
     && echo Building the wars before patching so embedded api patching works properly \
-    && cd /opt/grouper.ui-2.2.1 \
+    && cd /opt/grouper.ui-$GROUPER_VERSION \
     && /opt/apache-ant-1.9.5/bin/ant war \
     && cp dist/grouper.war /opt/apache-tomcat-6.0.44/webapps \
-    && cd /opt/grouper.ws-2.2.1/grouper-ws/ \
+    && cd /opt/grouper.ws-$GROUPER_VERSION/grouper-ws/ \
     && /opt/apache-ant-1.9.5/bin/ant dist \
     && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.44/webapps \ 
-    && cd /opt/grouper.apiBinary-2.2.1 \
+    && echo Extracting Tomcats war files for patching \
+    && mkdir /opt/apache-tomcat-6.0.44/webapps/grouper/ /opt/apache-tomcat-6.0.44/webapps/grouper-ws/ \
+    && cd /opt/apache-tomcat-6.0.44/webapps/grouper \
+    && $JAVA_HOME/bin/jar xvf ../grouper.war \
+    && cd /opt/apache-tomcat-6.0.44/webapps/grouper-ws \
+    && $JAVA_HOME/bin/jar xvf ../grouper-ws.war \
+    && cd /opt/grouper.apiBinary-$GROUPER_VERSION \
     && bin/gsh -registry -check -runscript -noprompt \
-    && mkdir /tmp/grp-api/ /tmp/grp-ui/ /tmp/grp-psp/ /tmp/grp-ws/ \   
-    && expect /opt/patch-scripts/api-patch \
-    && cd /opt/grouper.apiBinary-2.2.1 \
+    && mkdir /tmp/grp-api/ /tmp/grp-ui/ /tmp/grp-psp/ /tmp/grp-ws/ \
+    && cd / \
+    && cp /opt/patch-scripts/grouper.installer-api.properties /grouper.installer.properties \
+    && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
+    && cd /opt/grouper.apiBinary-$GROUPER_VERSION \
     && bin/gsh -registry -check -runscript -noprompt \
     && bin/gsh /bootstrap.gsh \
-    && expect /opt/patch-scripts/psp-patch \
-    && /opt/apache-tomcat-6.0.44/bin/startup.sh \
-    && sleep 20s \
-    && /opt/apache-tomcat-6.0.44/bin/shutdown.sh \
-    && expect /opt/patch-scripts/ui-patch \
-    && expect /opt/patch-scripts/ws-patch \
-    && rm -fr /tmp/grp-ui/ /tmp/grp-api//tmp/grp-psp/ /tmp/grp-ws/ /opt/apache-tomcat-6.0.44/work/
+    && cd / \
+    && cp /opt/patch-scripts/grouper.installer-psp.properties /grouper.installer.properties \
+    && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
+    && cp /opt/patch-scripts/grouper.installer-ui.properties /grouper.installer.properties \
+    && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
+    && cp /opt/patch-scripts/grouper.installer-ws.properties /grouper.installer.properties \
+    && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
+    && rm -fr /tmp/grp-ui/ /tmp/grp-api/ /tmp/grp-psp/ /tmp/grp-ws/
 
 EXPOSE 389 3306 8080
 
