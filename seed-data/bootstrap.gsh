@@ -23,6 +23,18 @@ setGroupAttr("loader:coursesLoader", "grouperLoaderScheduleType", "CRON");
 setGroupAttr("loader:coursesLoader", "grouperLoaderQuartzCron", "0 * * * * ?");
 setGroupAttr("loader:coursesLoader", "grouperLoaderQuery", "select distinct uid as SUBJECT_ID, CONCAT('courses:', courseID) as GROUP_NAME from SIS_COURSES");
 
+
+addRootStem("affiliations","affiliations");
+
+folder = StemFinder.findByName(gs, "affiliations");
+AttributeAssign attributeAssign = folder.getAttributeDelegate().addAttribute(RuleUtils.ruleAttributeDefName()).getAttributeAssign();
+AttributeValueDelegate attributeValueDelegate = attributeAssign.getAttributeValueDelegate();
+attributeValueDelegate.assignValue(RuleUtils.ruleActAsSubjectSourceIdName(), "g:isa");
+attributeValueDelegate.assignValue(RuleUtils.ruleActAsSubjectIdName(), "GrouperSystem");
+attributeValueDelegate.assignValue(RuleUtils.ruleCheckTypeName(), RuleCheckType.groupCreate.name());
+attributeValueDelegate.assignValue(RuleUtils.ruleCheckStemScopeName(), Stem.Scope.SUB.name());
+attributeValueDelegate.assignValue(RuleUtils.ruleThenElName(),"${ruleElUtils.assignGroupPrivilege(groupId, 'g:gsa', groupId, null, 'read')}");
+
 group = new GroupSave(gs).assignName("loader:affiliationLoader").assignCreateParentStemsIfNotExist(true).save();
 group.getAttributeDelegate().assignAttribute(LoaderLdapUtils.grouperLoaderLdapAttributeDefName()).getAttributeAssign();
 attributeAssign = group.getAttributeDelegate().retrieveAssignment(null, LoaderLdapUtils.grouperLoaderLdapAttributeDefName(), false, true);
