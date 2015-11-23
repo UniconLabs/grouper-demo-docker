@@ -2,10 +2,10 @@ FROM ubuntu:trusty
 
 MAINTAINER John Gasper <jgasper@unicon.net>
 
-ENV JAVA_HOME /opt/jdk1.7.0_79
-ENV ANT_HOME /opt/apache-ant-1.9.5
-ENV PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin
-ENV GROUPER_VERSION 2.2.2
+ENV JAVA_HOME /opt/jdk1.7.0_79 \
+    ANT_HOME /opt/apache-ant-1.9.5 \
+    PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin \
+    GROUPER_VERSION 2.2.2
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim
