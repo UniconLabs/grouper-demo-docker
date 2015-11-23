@@ -54,7 +54,7 @@ RUN java_version=7u79; \
     && cp -R /opt/grouper.psp-$GROUPER_VERSION/lib/custom/* /opt/grouper.apiBinary-$GROUPER_VERSION/lib/custom \
     && rm grouper.apiBinary-$GROUPER_VERSION.tar.gz grouper.ui-$GROUPER_VERSION.tar.gz grouper.ws-$GROUPER_VERSION.tar.gz grouper.psp-$GROUPER_VERSION.tar.gz grouper.clientBinary-$GROUPER_VERSION.tar.gz
  
-ADD seed-data/ /
+COPY seed-data/ /
 
 #MySql shamelessly stolen from https://github.com/dockerfile/mysql/blob/master/Dockerfile
 RUN \
@@ -83,7 +83,7 @@ RUN service slapd start \
     && ldapadd -H ldapi:/// -f users.ldif -x -D "cn=admin,dc=example,dc=edu" -w password 1>/dev/null \
     && rm /*.ldif /eduPerson.schema quickstart.xml
     
-ADD opt/ /opt/
+COPY opt/ /opt/
 
 RUN set -x; \
     chmod -R +x /opt/container-scripts/; \
