@@ -2,10 +2,10 @@ FROM ubuntu:trusty
 
 MAINTAINER John Gasper <jgasper@unicon.net>
 
-ENV JAVA_HOME /opt/jdk1.7.0_79 \
-    ANT_HOME /opt/apache-ant-1.9.5 \
-    PATH $PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin \
-    GROUPER_VERSION 2.2.2
+ENV JAVA_HOME=/opt/jdk1.7.0_79 \
+    ANT_HOME=/opt/apache-ant-1.9.5 \
+    PATH=$PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin \
+    GROUPER_VERSION=2.2.2
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim
@@ -21,7 +21,7 @@ RUN java_version=7u79; \
     && echo 'Downloading grouper installer...'\
     && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouperInstaller.jar \
     && echo 'Downloading grouper API...'\
-    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.apiBinary-2.2.2.tar.gz \
+    && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.apiBinary-$GROUPER_VERSION.tar.gz \
     && echo 'Downloading grouper UI...'\
     && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/grouper.ui-$GROUPER_VERSION.tar.gz \
     && echo 'Downloading grouper Web Services...'\
