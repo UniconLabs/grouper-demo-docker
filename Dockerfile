@@ -5,7 +5,7 @@ MAINTAINER John Gasper <jgasper@unicon.net>
 ENV JAVA_HOME=/opt/jdk1.7.0_79 \
     ANT_HOME=/opt/apache-ant-1.9.5 \
     PATH=$PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin \
-    GROUPER_VERSION=2.2.2
+    GROUPER_VERSION=2.3.0
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim
@@ -51,7 +51,7 @@ RUN java_version=7u79; \
     && tar -zxf grouper.ws-$GROUPER_VERSION.tar.gz -C /opt \
     && tar -zxf grouper.clientBinary-$GROUPER_VERSION.tar.gz -C /opt \
     && tar -zxf grouper.psp-$GROUPER_VERSION.tar.gz -C /opt \
-    && cp -R /opt/grouper.psp-$GROUPER_VERSION/lib/custom/* /opt/grouper.apiBinary-$GROUPER_VERSION/lib/custom \
+    &&  cp -R /opt/grouper.psp-$GROUPER_VERSION/lib/custom/* /opt/grouper.apiBinary-$GROUPER_VERSION/lib/custom \
     && rm grouper.apiBinary-$GROUPER_VERSION.tar.gz grouper.ui-$GROUPER_VERSION.tar.gz grouper.ws-$GROUPER_VERSION.tar.gz grouper.psp-$GROUPER_VERSION.tar.gz grouper.clientBinary-$GROUPER_VERSION.tar.gz
  
 COPY seed-data/ /
