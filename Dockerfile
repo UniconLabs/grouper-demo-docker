@@ -8,7 +8,8 @@ ENV JAVA_HOME=/opt/jdk1.7.0_79 \
     GROUPER_VERSION=2.3.0
 
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim \
+    && apt-get clean
 
 RUN java_version=7u79; \    
     echo 'Downloading the JDK...' \    
@@ -39,11 +40,11 @@ RUN java_version=7u79; \
     \
     && echo "409e93f383ec476cde4c9b87f2427dbf  apache-tomcat-6.0.44.zip" | md5sum -c - \
     && unzip apache-tomcat-6.0.44.zip -d /opt 1>/dev/null \    
-    && rm apache-tomcat-6.0.44.zip \
+    && rm -r apache-tomcat-6.0.44.zip /opt/apache-tomcat-6.0.44/webapps/* \
     \
     && unzip apache-ant-1.9.5-bin.zip -d /opt 1>/dev/null \
     && echo "8c4193db6ac91c3f792a04715f8e9a82ef628daf  apache-ant-1.9.5-bin.zip" | sha1sum -c - \
-    && rm apache-ant-1.9.5-bin.zip \
+    && rm -r apache-ant-1.9.5-bin.zip /opt/apache-ant-1.9.5/manual/ \
     && chmod +x /opt/apache-ant-1.9.5/bin/ant \
     \
     && tar -zxf grouper.apiBinary-$GROUPER_VERSION.tar.gz -C /opt \
@@ -51,13 +52,13 @@ RUN java_version=7u79; \
     && tar -zxf grouper.ws-$GROUPER_VERSION.tar.gz -C /opt \
     && tar -zxf grouper.clientBinary-$GROUPER_VERSION.tar.gz -C /opt \
     && tar -zxf grouper.psp-$GROUPER_VERSION.tar.gz -C /opt \
-    &&  cp -R /opt/grouper.psp-$GROUPER_VERSION/lib/custom/* /opt/grouper.apiBinary-$GROUPER_VERSION/lib/custom \
+    && cp -R /opt/grouper.psp-$GROUPER_VERSION/lib/custom/* /opt/grouper.apiBinary-$GROUPER_VERSION/lib/custom \
     && rm grouper.apiBinary-$GROUPER_VERSION.tar.gz grouper.ui-$GROUPER_VERSION.tar.gz grouper.ws-$GROUPER_VERSION.tar.gz grouper.psp-$GROUPER_VERSION.tar.gz grouper.clientBinary-$GROUPER_VERSION.tar.gz
  
 COPY seed-data/ /
 
 #MySql shamelessly stolen from https://github.com/dockerfile/mysql/blob/master/Dockerfile
-RUN \
+RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.6 && \
   sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
   sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf && \
@@ -73,7 +74,8 @@ RUN \
   mysql grouper < /sisData.sql \
   && echo 'slapd/root_password password password' | debconf-set-selections \
   && echo 'slapd/root_password_again password password' | debconf-set-selections \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -y ldap-utils
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y ldap-utils \
+  && apt-get clean
 
 RUN service slapd start \
     && mkdir -p /var/ldap/example \
@@ -81,7 +83,7 @@ RUN service slapd start \
     && ldapadd -Y EXTERNAL -H ldapi:/// -f init.ldif \
     && ldapadd -Y EXTERNAL -H ldapi:/// -f eduPerson.schema \
     && ldapadd -H ldapi:/// -f users.ldif -x -D "cn=admin,dc=example,dc=edu" -w password 1>/dev/null \
-    && rm /*.ldif /eduPerson.schema quickstart.xml
+    && rm /*.ldif /eduPerson.schema /quickstart.xml
     
 COPY opt/ /opt/
 
@@ -94,10 +96,10 @@ RUN set -x; \
     && echo Building the wars before patching so embedded api patching works properly \
     && cd /opt/grouper.ui-$GROUPER_VERSION \
     && /opt/apache-ant-1.9.5/bin/ant war \
-    && cp dist/grouper.war /opt/apache-tomcat-6.0.44/webapps \
+    && mv dist/grouper.war /opt/apache-tomcat-6.0.44/webapps \
     && cd /opt/grouper.ws-$GROUPER_VERSION/grouper-ws/ \
     && /opt/apache-ant-1.9.5/bin/ant dist \
-    && cp build/dist/grouper-ws.war /opt/apache-tomcat-6.0.44/webapps \ 
+    && mv build/dist/grouper-ws.war /opt/apache-tomcat-6.0.44/webapps \ 
     && echo Extracting Tomcats war files for patching \
     && mkdir /opt/apache-tomcat-6.0.44/webapps/grouper/ /opt/apache-tomcat-6.0.44/webapps/grouper-ws/ \
     && cd /opt/apache-tomcat-6.0.44/webapps/grouper \
@@ -119,7 +121,9 @@ RUN set -x; \
     && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
     && cp /opt/patch-scripts/grouper.installer-ws.properties /grouper.installer.properties \
     && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
-    && rm -fr /tmp/grp-ui/ /tmp/grp-api/ /tmp/grp-psp/ /tmp/grp-ws/
+    && rm -fr /tmp/grp-ui/ /tmp/grp-api/ /tmp/grp-psp/ /tmp/grp-ws/  \
+    && rm -r /opt/apache-tomcat-6.0.44/webapps/grouper.war /opt/apache-tomcat-6.0.44/webapps/grouper-ws.war
+
 
 EXPOSE 389 3306 8080
 
