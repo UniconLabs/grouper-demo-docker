@@ -112,7 +112,6 @@ RUN set -x; \
     && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
     && cd /opt/grouper.apiBinary-$GROUPER_VERSION \
     && bin/gsh -registry -check -runscript -noprompt \
-    && bin/gsh /bootstrap.gsh \
     && cd / \
     && cp /opt/patch-scripts/grouper.installer-psp.properties /grouper.installer.properties \
     && $JAVA_HOME/bin/java -cp .:/grouperInstaller.jar edu.internet2.middleware.grouperInstaller.GrouperInstaller \
