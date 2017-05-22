@@ -2,7 +2,7 @@ FROM ubuntu:trusty
 
 MAINTAINER John Gasper <jgasper@unicon.net>
 
-ENV JAVA_HOME=/opt/jdk1.7.0_79 \
+ENV JAVA_HOME=/opt/jdk-home \
     ANT_HOME=/opt/apache-ant-1.9.5 \
     PATH=$PATH:$JRE_HOME/bin:/opt/container-scripts:$ANT_HOME/bin \
     GROUPER_VERSION=2.3.0
@@ -11,10 +11,10 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y slapd wget tar unzip dos2unix expect vim \
     && apt-get clean
 
-RUN java_version=7u79; \    
+RUN java_version=8.0.131; \
+    zulu_version=8.21.0.1; \
     echo 'Downloading the JDK...' \    
-    && wget -q --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-    http://download.oracle.com/otn-pub/java/jdk/$java_version-b15/jdk-$java_version-linux-x64.tar.gz \
+    && wget -q http://cdn.azul.com/zulu/bin/zulu$zulu_version-jdk$java_version-linux_x64.tar.gz \
     && echo 'Downloading Tomcat...'\
     && wget -q https://archive.apache.org/dist/tomcat/tomcat-6/v6.0.44/bin/apache-tomcat-6.0.44.zip \
     && echo 'Downloading Ant...'\
@@ -34,9 +34,10 @@ RUN java_version=7u79; \
     && echo 'Downloading grouper Quickstart...'\
     && wget -q http://software.internet2.edu/grouper/release/$GROUPER_VERSION/quickstart.xml \
     \
-    && echo "9222e097e624800fdd9bfb568169ccad  jdk-$java_version-linux-x64.tar.gz" | md5sum -c - \
-    && tar -zxvf jdk-$java_version-linux-x64.tar.gz -C /opt 1>/dev/null \
-    && rm jdk-$java_version-linux-x64.tar.gz \ 
+    && echo "1931ed3beedee0b16fb7fd37e069b162  zulu$zulu_version-jdk$java_version-linux_x64.tar.gz" | md5sum -c - \
+    && tar -zxvf zulu$zulu_version-jdk$java_version-linux_x64.tar.gz -C /opt \
+    && rm zulu$zulu_version-jdk$java_version-linux_x64.tar.gz \
+    && ln -s /opt/zulu$zulu_version-jdk$java_version-linux_x64/ /opt/jdk-home \
     \
     && echo "409e93f383ec476cde4c9b87f2427dbf  apache-tomcat-6.0.44.zip" | md5sum -c - \
     && unzip apache-tomcat-6.0.44.zip -d /opt 1>/dev/null \    
@@ -90,7 +91,7 @@ COPY opt/ /opt/
 RUN set -x; \
     chmod -R +x /opt/container-scripts/; \
     chmod -R +x /opt/apache-tomcat-6.0.44/bin/*.sh; \
-    JAVA_HOME=/opt/jdk1.7.0_79; \
+    JAVA_HOME=/opt/jdk-home; \
     service slapd start \
     && service mysql start \
     && echo Building the wars before patching so embedded api patching works properly \
