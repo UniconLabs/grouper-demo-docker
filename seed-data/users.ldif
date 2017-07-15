@@ -1,21 +1,9 @@
-dn: dc=example,dc=edu
-dc: example
-objectClass: dcObject
-objectClass: top
-objectClass: organization
-o: example.edu
-
 dn: cn=admin,dc=example,dc=edu
 objectClass: simpleSecurityObject
 objectClass: organizationalRole
 cn: admin
 userPassword: password
 description: LDAP administrator
-
-dn: ou=People,dc=example,dc=edu
-objectClass: organizationalUnit
-objectClass: top
-ou: People
 
 dn: uid=jsmith,ou=People,dc=example,dc=edu
 objectClass: organizationalPerson
@@ -38,11 +26,6 @@ uid: banderson
 sn: Anderson
 cn: Bob Anderson
 userPassword: password
-
-dn: ou=Groups,dc=example,dc=edu
-objectClass: organizationalUnit
-objectClass: top
-ou: Groups
 
 dn: cn=users,ou=Groups,dc=example,dc=edu
 objectClass: groupOfUniqueNames

@@ -1,9 +1,11 @@
 #!/bin/bash
 set -x
 
-service mysql start
+/usr/sbin/ns-slapd -D /etc/dirsrv/slapd-dir
+mysqld_safe &
 
-service slapd start
+while ! curl -s localhost:3306 > /dev/null; do echo waiting for mysql to start; sleep 2; done;
+while ! curl -s "ldap://localhost:389" > /dev/null; do echo waiting for 389-ds to start; sleep 2; done;
 
 if [ -z "$disable" ]
 then
@@ -21,34 +23,34 @@ fi
 
 if [[ "${disabled_components[@]}" =~ "UI" ]]
 then
-  mv /opt/apache-tomcat-6.0.44/webapps/grouper/ /opt/apache-tomcat-6.0.44/grouper-disabled
-  rm /opt/apache-tomcat-6.0.44/webapps/grouper.war
+  mv /opt/tomcat/webapps/grouper/ /opt/apache-tomcat/grouper-disabled
+  rm /opt/tomcat/webapps/grouper.war
 fi
 
 if [[ "${disabled_components[@]}" =~ "WS" ]]
 then
-    mv /opt/apache-tomcat-6.0.44/webapps/grouper-ws/ /opt/apache-tomcat-6.0.44/ws-disabled
-    rm /opt/apache-tomcat-6.0.44/webapps/grouper-ws.war
+    mv /opt/tomcat/webapps/grouper-ws/ /opt/tomcat/ws-disabled
+    rm /opt/tomcat/webapps/grouper-ws.war
 fi
 
-rm -rf /opt/apache-tomcat-6.0.44/work/*
+rm -rf /opt/tomcat/work/*
 
 if [[ ! "${disabled_components[@]}" =~ "TOMCAT" ]]
 then
-    /opt/apache-tomcat-6.0.44/bin/startup.sh
+    /opt/tomcat/bin/startup.sh
 fi
 
 cd /opt/grouper.apiBinary-2.3.0/
-bin/gsh /bootstrap.gsh
+bin/gsh /seed-data/bootstrap.gsh
 
 if [[ ! "${disabled_components[@]}" =~ "SAMPLE-JOBS" ]]
 then
-    bin/gsh /sample-jobs-bootstrap.gsh
+    bin/gsh /seed-data/sample-jobs-bootstrap.gsh
 fi
 
 if [[ "${enabled_components[@]}" =~ "TIER" ]]
 then
-    bin/gsh /tier-bootstrap.gsh
+    bin/gsh /seed-data/tier-bootstrap.gsh
 fi
 
 if [[ ! "${disabled_components[@]}" =~ "DAEMON" ]]
