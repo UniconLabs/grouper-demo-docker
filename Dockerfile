@@ -92,8 +92,8 @@ RUN useradd ldapadmin \
     && sed -i '/if (@errs = startServer($inf))/,/}/d' /usr/lib64/dirsrv/perl/* \
     && setup-ds.pl --silent --file /seed-data/ds-setup.inf \
     && /usr/sbin/ns-slapd -D /etc/dirsrv/slapd-dir \ 
-    && sleep 3 \
-    && ldapadd -H ldap:/// -f /seed-data/users.ldif -x -D "cn=Directory Manager" -w password
+    && while ! curl -s ldap://localhost:389 > /dev/null; do echo waiting for ldap to start; sleep 1; done; \
+    ldapadd -H ldap:/// -f /seed-data/users.ldif -x -D "cn=Directory Manager" -w password
     
 COPY opt/ /opt/
 
@@ -103,6 +103,8 @@ RUN set -x; \
     JAVA_HOME=/opt/jdk-home; \
     (/usr/sbin/ns-slapd -D /etc/dirsrv/slapd-dir &); \
     (/usr/bin/mysqld_safe &); \
+    while ! curl -s ldap://localhost:389 > /dev/null; do echo waiting for ldap to start; sleep 1; done; \
+    while ! curl -s localhost:3306 > /dev/null; do echo waiting for mysqld to start; sleep 3; done; \
     echo Building the wars before patching so embedded api patching works properly \
     && cd /opt/grouper.ui-$GROUPER_VERSION \
     && /opt/ant/bin/ant war \
